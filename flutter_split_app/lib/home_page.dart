@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    _split = Splitio('ci18mk0oocsbusvnahvg3g5aa9tpu3f3mdp8', 'KEY');
+    _split = Splitio('', 'KEY');
     _client = _split.client();
     super.initState();
   }
@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // get split name
             TextButton(
               onPressed: () {
                 retrieveSplitValue();
@@ -59,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: const Text(
-                  'Obtener Data desde Split',
+                  'Get split Console',
                   style: TextStyle(color: Colors.white, fontSize: 13.0),
                 ),
               ),
