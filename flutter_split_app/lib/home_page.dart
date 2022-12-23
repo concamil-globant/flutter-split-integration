@@ -15,6 +15,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // split var
   late Splitio _split;
   late SplitClient _client;
+  String? Paquetigos_FF_CategoriesValue = 'Value:';
+  String estado = '';
 
   @override
   void initState() {
@@ -30,7 +32,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> retrieveSplitValue() async {
-    final String treatment = await _client.getTreatment('flutter_split_test');
+    final String treatment = await _client.getTreatment('Paquetigos_FF_Categories');
+    /// la función getTreatmentWithConfig se usa para obtener los valores de las configuraciones dinámicas
+    /// en forma de JSON, se pueden configurar valores cuando está en off y on
+   /// en caso que no se asigne valores a la variable, entonces devuelve null
+    SplitResult result = await _client.getTreatmentWithConfig("Paquetigos_FF_Categories");
+
+    setState(() {
+      Paquetigos_FF_CategoriesValue = result.config;
+      estado = treatment;
+    });
+
     if (treatment == 'on') {
       /// Insert code here to show on treatment
     } else if (treatment == 'off') {
@@ -65,6 +77,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text('State: ' + estado),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(Paquetigos_FF_CategoriesValue ?? 'no data' ),
+
           ],
         ),
       ),
