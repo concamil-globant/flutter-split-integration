@@ -20,7 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    _split = Splitio('', 'KEY');
+    _split = Splitio('qjk84kfupqh6c15qplaoq451a2mskcnscrk1', 'KEY');
     _client = _split.client();
     super.initState();
   }
