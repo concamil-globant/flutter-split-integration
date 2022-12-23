@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:splitio/split_client.dart';
 import 'package:splitio/splitio.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    _split = Splitio('qjk84kfupqh6c15qplaoq451a2mskcnscrk1', 'KEY');
+    _split = Splitio('', 'KEY');
     _client = _split.client();
     super.initState();
   }
@@ -32,11 +31,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> retrieveSplitValue() async {
-    final String treatment = await _client.getTreatment('Paquetigos_FF_Categories');
+    // seteamos el pais el formato es {"atribute_name", "value"}
+    await _client.setAttribute("country", "hn");
+
+    final String treatment = await _client.getTreatment('flutter_split_test');
+
     /// la función getTreatmentWithConfig se usa para obtener los valores de las configuraciones dinámicas
     /// en forma de JSON, se pueden configurar valores cuando está en off y on
-   /// en caso que no se asigne valores a la variable, entonces devuelve null
-    SplitResult result = await _client.getTreatmentWithConfig("Paquetigos_FF_Categories");
+    /// en caso que no se asigne valores a la variable, entonces devuelve null
+    SplitResult result =await _client.getTreatmentWithConfig("flutter_split_test");
 
     setState(() {
       Paquetigos_FF_CategoriesValue = result.config;
@@ -84,8 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 20,
             ),
-            Text(Paquetigos_FF_CategoriesValue ?? 'no data' ),
-
+            Text(Paquetigos_FF_CategoriesValue ?? 'no data'),
           ],
         ),
       ),
