@@ -14,7 +14,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // split var
   late Splitio _split;
   late SplitClient _client;
-  String? Paquetigos_FF_CategoriesValue = 'Value:';
+  String? configsValue = 'Value:';
   String estado = '';
 
   @override
@@ -32,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> retrieveSplitValue() async {
     // seteamos el pais el formato es {"atribute_name", "value"}
+    // con esto obtenemos el valor unicamente para nuestro pais seleccionado
     await _client.setAttribute("country", "hn");
 
     final String treatment = await _client.getTreatment('flutter_split_test');
@@ -42,16 +43,16 @@ class _MyHomePageState extends State<MyHomePage> {
     SplitResult result =await _client.getTreatmentWithConfig("flutter_split_test");
 
     setState(() {
-      Paquetigos_FF_CategoriesValue = result.config;
+      configsValue = result.config;
       estado = treatment;
     });
 
-    if (treatment == 'on') {
+    if (treatment == 'hn') {
       /// Insert code here to show on treatment
-    } else if (treatment == 'off') {
+    } else if (treatment == 'mx') {
       /// Insert code here to show off treatment
     } else {
-      /// Insert your control treatment code here
+      /// Insert your control treatment code here (no aplica)
     }
   }
 
@@ -87,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 20,
             ),
-            Text(Paquetigos_FF_CategoriesValue ?? 'no data'),
+            Text(configsValue ?? 'no data'),
           ],
         ),
       ),
