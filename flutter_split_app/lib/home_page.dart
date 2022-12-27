@@ -40,11 +40,15 @@ class _MyHomePageState extends State<MyHomePage> {
     /// la función getTreatmentWithConfig se usa para obtener los valores de las configuraciones dinámicas
     /// en forma de JSON, se pueden configurar valores cuando está en off y on
     /// en caso que no se asigne valores a la variable, entonces devuelve null
-    SplitResult result =await _client.getTreatmentWithConfig("Paquetigos_FF_Categories");
+    SplitResult result = await _client.getTreatmentWithConfig("Paquetigos_FF_Categories");
 
-     /// _split.splitNames() trae el listado de todos los splits
+    /// _split.splitNames() trae el listado de todos los splits
     /// ejemplo: [Paquetigos_FF_Categories, GV_Wallet_Version]
-  List<String>  getSplits = await _split.splitNames();
+    List<String> getSplits = await _split.splitNames();
+
+    // Tratamiento de Variables Grandes, primero se obtiene el index
+    SplitResult stackIndex = await _client.getTreatmentWithConfig('GV_signup_Dynamic_Form_data_index');
+    var valores = stackIndex.config;
 
     setState(() {
       configsValue = result.config;
@@ -52,11 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     if (treatment == 'hn') {
-      /// Insert code here to show on treatment
+      // flujo cuando el pais es HN
     } else if (treatment == 'mx') {
-      /// Insert code here to show off treatment
+      // // flujo cuando el pais es MX
     } else {
-      /// Insert your control treatment code here (no aplica)
+      // flujo cuando el pais no existe (NO APLICA)
     }
   }
 
