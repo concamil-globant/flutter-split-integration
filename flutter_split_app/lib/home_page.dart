@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_split_app/model/split_signup_dynamic_model.dart';
+import 'package:flutter_split_app/model/split_signup_dynamic_index.dart';
 
 import 'package:splitio/splitio.dart';
 
@@ -35,20 +40,20 @@ class _MyHomePageState extends State<MyHomePage> {
     // con esto obtenemos el valor unicamente para nuestro pais seleccionado
     await _client.setAttribute("country", "hn");
 
-    final String treatment = await _client.getTreatment('Paquetigos_FF_Categories');
+    final String treatment = await _client.getTreatment('flutter_split_test');
 
     /// la función getTreatmentWithConfig se usa para obtener los valores de las configuraciones dinámicas
     /// en forma de JSON, se pueden configurar valores cuando está en off y on
     /// en caso que no se asigne valores a la variable, entonces devuelve null
-    SplitResult result = await _client.getTreatmentWithConfig("Paquetigos_FF_Categories");
+    SplitResult result =
+        await _client.getTreatmentWithConfig("flutter_split_test");
 
     /// _split.splitNames() trae el listado de todos los splits
     /// ejemplo: [Paquetigos_FF_Categories, GV_Wallet_Version]
     List<String> getSplits = await _split.splitNames();
 
-    // Tratamiento de Variables Grandes, primero se obtiene el index
-    SplitResult stackIndex = await _client.getTreatmentWithConfig('GV_signup_Dynamic_Form_data_index');
-    var valores = stackIndex.config;
+    // Tratamiento de data de gran volumen particionada
+    await segmentedSplitTreatment();
 
     setState(() {
       configsValue = result.config;
@@ -62,6 +67,29 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       // flujo cuando el pais no existe (NO APLICA)
     }
+  }
+
+  Future<void> segmentedSplitTreatment() async {
+    // get index
+    SplitResult stackIndex = await _client
+        .getTreatmentWithConfig('GV_signup_Dynamic_Form_data_index');
+    var decodedResponse = jsonDecode(stackIndex.config.toString());
+    List<SplitSignupDynamicIndex> signupDataIndex = (decodedResponse as List)
+        .map((e) => SplitSignupDynamicIndex.fromJson(e))
+        .toList();
+
+    // read parts
+    SplitSignupDynamicModel stackModel = SplitSignupDynamicModel.empty();
+    for (var element in signupDataIndex) {
+      SplitResult stackBody =
+          await _client.getTreatmentWithConfig(element.identifier);
+      var decodedResponse = jsonDecode(stackBody.config.toString());
+      if (decodedResponse != null) {
+        stackModel.fromJsonAppend(decodedResponse);
+      }
+    }
+
+    print(stackModel);
   }
 
   @override
