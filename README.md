@@ -16,3 +16,13 @@ https://www.split.io
 
 you need to setup the split.io key-access (client-side) in 
 - home_page.dart line 22
+
+# big value treatment
+for big values (more than 1000kb in json config) we'r using a custom solution
+1. Make a custom index for each split values
+
+![Captura de Pantalla 2022-12-28 a la(s) 17 15 11](https://user-images.githubusercontent.com/75485698/209995384-d565a274-fda4-45a9-8143-d0e76f235ecd.png)
+
+2. Read the index and build up the value from each part
+
+for example see home_page.dart method 'segmentedSplitTreatment'
