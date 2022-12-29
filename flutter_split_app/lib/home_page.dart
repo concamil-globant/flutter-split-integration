@@ -80,8 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // read parts
       SplitSignupDynamicModel stackModel = SplitSignupDynamicModel.empty();
       for (var element in signupDataIndex) {
-        SplitResult stackBody =
-            await _client.getTreatmentWithConfig(element.identifier);
+        SplitResult stackBody = await _client.getTreatmentWithConfig(element.identifier);
         var decodedResponse = jsonDecode(stackBody.config.toString());
         if (decodedResponse != null) {
           stackModel.fromJsonAppend(decodedResponse);
