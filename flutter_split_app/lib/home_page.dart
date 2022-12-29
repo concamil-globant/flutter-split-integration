@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_split_app/model/split_signup_dynamic_model.dart';
-import 'package:flutter_split_app/model/split_signup_dynamic_index.dart';
+import 'package:flutter_split_app/model/split_index_model.dart';
 
 import 'package:splitio/splitio.dart';
 
@@ -38,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> retrieveSplitValue() async {
     // seteamos el pais el formato es {"atribute_name", "value"}
     // con esto obtenemos el valor unicamente para nuestro pais seleccionado
-    await _client.setAttribute("country", "hn");
+    await _client.setAttribute("country", "py");
 
     final String treatment = await _client.getTreatment('flutter_split_test');
 
@@ -71,25 +70,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> segmentedSplitTreatment() async {
     // get index
-    SplitResult stackIndex = await _client
-        .getTreatmentWithConfig('GV_signup_Dynamic_Form_data_index');
+    SplitResult stackIndex = await _client.getTreatmentWithConfig('GV_signup_Dynamic_Form_data_index');
     var decodedResponse = jsonDecode(stackIndex.config.toString());
-    List<SplitSignupDynamicIndex> signupDataIndex = (decodedResponse as List)
-        .map((e) => SplitSignupDynamicIndex.fromJson(e))
-        .toList();
+    if (decodedResponse != null) {
+      List<SplitIndexModel> signupDataIndex = (decodedResponse as List)
+          .map((e) => SplitIndexModel.fromJson(e))
+          .toList();
 
-    // read parts
-    SplitSignupDynamicModel stackModel = SplitSignupDynamicModel.empty();
-    for (var element in signupDataIndex) {
-      SplitResult stackBody =
-          await _client.getTreatmentWithConfig(element.identifier);
-      var decodedResponse = jsonDecode(stackBody.config.toString());
-      if (decodedResponse != null) {
-        stackModel.fromJsonAppend(decodedResponse);
+      // read parts
+      SplitSignupDynamicModel stackModel = SplitSignupDynamicModel.empty();
+      for (var element in signupDataIndex) {
+        SplitResult stackBody =
+            await _client.getTreatmentWithConfig(element.identifier);
+        var decodedResponse = jsonDecode(stackBody.config.toString());
+        if (decodedResponse != null) {
+          stackModel.fromJsonAppend(decodedResponse);
+        }
       }
     }
-
-    print(stackModel);
   }
 
   @override
